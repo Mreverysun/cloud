@@ -1,0 +1,41 @@
+eureka:
+  client:
+    serviceUrl:
+      #注册中心的地址
+      defaultZone:  http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}
+    #5秒一次心跳
+    lease-renewal-interval-in-seconds: 5
+    #告知注册中心30秒未收到心跳则移除服务
+    lease-expiration-duration-in-seconds: 10
+
+
+server:
+  #当前服务端口号
+  port: 8760
+spring:
+  application:
+    name: config-service
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://your-git.com/group/xxx.git
+          username: user
+          password: password
+          search-paths:
+            - config-service-repo/setting_dev
+            - config-service-repo/setting_test
+            - config-service-repo/setting_pro
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - refresh
+          - health
+          - info
+logging:
+  file: logs/config-service.log
